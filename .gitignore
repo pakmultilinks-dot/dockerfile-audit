@@ -1,0 +1,7 @@
+# Large binary artifacts - not committed (rebuild via scripts/)
+images/*.tar
+images/built/
+build-layers/
+debs/
+*.pyc
+__pycache__/

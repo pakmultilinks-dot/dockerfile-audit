@@ -1,0 +1,21 @@
+# Sample 1: Python web app - BEFORE (has problems, do not use as-is)
+FROM python:latest
+
+WORKDIR /app
+
+# copies everything first: breaks layer caching, drags in .git, __pycache__, secrets
+COPY . .
+
+# leaves apt cache in the layer, installs build tools never removed
+RUN apt-get update && apt-get install -y gcc curl
+
+RUN pip install -r requirements.txt
+
+# hardcoded secret in the image - anyone who pulls it can read it
+ENV API_KEY="sk-live-abc123"
+ENV DEBUG="true"
+
+EXPOSE 5000
+
+# shell form: signals don't reach the app, `docker stop` is slow
+CMD python app.py

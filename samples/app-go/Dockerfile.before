@@ -1,0 +1,16 @@
+# Sample 3: Go service - BEFORE (has problems, do not use as-is)
+FROM golang:latest
+
+WORKDIR /app
+
+# whole toolchain + source + module cache all ship in the final image
+COPY . .
+
+RUN go build -o server .
+
+ENV PORT="8080"
+
+EXPOSE 8080
+
+# runs as root, shell form
+CMD ./server

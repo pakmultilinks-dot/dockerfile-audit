@@ -1,0 +1,17 @@
+# Sample 3: Go service - AFTER (audited, smaller, safer)
+
+# ---- build stage ----
+FROM golang:1.22-bookworm AS build
+WORKDIR /src
+COPY go.mod ./
+RUN go mod download
+COPY main.go ./
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /server .
+
+# ---- runtime stage: static binary on a minimal base ----
+FROM debian:12-slim
+RUN useradd --create-home --uid 10001 appuser
+COPY --from=build --chown=appuser:appuser /server /server
+USER appuser
+EXPOSE 8080
+ENTRYPOINT ["/server"]

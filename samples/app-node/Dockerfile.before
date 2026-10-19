@@ -1,0 +1,22 @@
+# Sample 2: Node.js API - BEFORE (has problems, do not use as-is)
+FROM node:latest
+
+WORKDIR /app
+
+# copies host node_modules and everything else into the image
+COPY . .
+
+# full install incl. devDependencies, no lockfile guarantee
+RUN npm install
+
+# dev-only tooling left in the production image
+RUN npm install -g nodemon
+
+ENV NODE_ENV=production
+# secret baked into the image
+ENV STRIPE_KEY="sk_test_51Habc"
+
+EXPOSE 3000
+
+# shell form again
+CMD npm start
