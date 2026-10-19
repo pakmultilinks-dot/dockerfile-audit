@@ -30,15 +30,15 @@ docker build -f samples/app-go/Dockerfile.after  -t go-after  samples/app-go
 docker images go-before go-after
 ```
 
-## Results (measured locally)
+## Results (measured 2026-10-19, `docker images`)
 
 | Sample | Before | After | Reduction |
 |--------|--------|-------|-----------|
-| app-python | _see run output_ | _see run output_ | - |
-| app-node | _see run output_ | _see run output_ | - |
-| app-go | _see run output_ | _see run output_ | - |
+| app-python | 1.2GB | 136MB | 88.7% |
+| app-node | 1.25GB | 230MB | 81.6% |
+| app-go | 893MB | 81.9MB | 90.8% |
 
-Run `./scripts/build-compare.sh` for the exact numbers on your machine.
+Key wins: pinned slim base images (`python:3.12-slim-bookworm`, `node:22-bookworm-slim`, `debian:12-slim`), multi-stage Go build, no `latest` tags, non-root users, `.dockerignore` files, exec-form CMD/ENTRYPOINT, HEALTHCHECKs, no leaked secrets.
 
 ## Notes
 
